@@ -18,5 +18,16 @@
     <ClCompile Include="CGResPatcher.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="minIni\minIni.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="minIni\minIni.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="minIni\minGlue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

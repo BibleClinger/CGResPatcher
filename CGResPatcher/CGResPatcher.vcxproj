@@ -144,6 +144,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CGResPatcher.c" />
+    <ClCompile Include="minIni\minIni.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="minIni\minGlue.h" />
+    <ClInclude Include="minIni\minIni.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

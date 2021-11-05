@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include "minIni/minIni.h"
+
+//#pragma warning(disable : 4996)
 
 /*
 	Usage:
@@ -45,7 +48,7 @@ typedef enum
 {
 	ERROR_NOERROR,
 	ERROR_NOCODE,
-	ERROR_NOINI,
+	ERROR_BADINI,
 	ERROR_NOEXE,
 	ERROR_FAILWRITE,
 	ERROR_BADPARAMS
@@ -55,7 +58,7 @@ typedef enum
 
 sResolution g_resolutionEntries[NUM_RESOLUTIONS] = { 0 };
 unsigned long g_offset = OFFSET_RESOLUTIONS;
-char* g_szExePath = NULL;
+char g_szExePath[INI_BUFFERSIZE] = { 0 };
 bool g_bCheckCurrentPath = false;
 
 // Function prototypes
@@ -75,7 +78,7 @@ void PrintUsage(void)
 {
 	const char * szUsage = \
 	"*****************************************\n" \
-	"*** CHResPatcher (C)2021 BibleClinger ***\n" \
+	"*** CGResPatcher (C)2021 BibleClinger ***\n" \
 	"*****************************************\n" \
 		"-r : Read current exe values. No writing.\n" \
 			"\t-i : specify ini for input.\n" \
@@ -163,6 +166,7 @@ eErrors ParseParameters(int argc, char **argv, eMode *mode, char **input, char *
 		else if (strcmp(argv[i], "-e") == 0)
 		{
 			*exeLocation = argv[i + 1];
+			i++;
 		}
 	}
 	return ERROR_NOERROR;
@@ -184,7 +188,7 @@ eErrors WriteGlobalVariablesToIni(char* szFile, bool bUseInternalDefaults, bool 
 		"Expanded3 = %dx%d; [A:6!| Z=6] 1280x1024: Third Expanded slot for fullscreen.Note : Default value is non-4:3. The 5:4 resolution does not fit.\n" \
 		"Stereo1 = %dx%d; [A:7!| Z=7] 320x400: Not recommended.\n" \
 		"Stereo2 = %dx%d; [AA:0!| Z=8] 320x480: Not recommended.\n";
-	if(!szFile)
+	if (!szFile)
 	{
 		szFile = DEFAULT_INI;
 	}
@@ -201,19 +205,19 @@ eErrors WriteGlobalVariablesToIni(char* szFile, bool bUseInternalDefaults, bool 
 	}
 	else
 	{
-		fprintf(f, szPayloadFormat, g_szExePath,g_resolutionEntries[0].x, g_resolutionEntries[0].y,\
-												g_resolutionEntries[1].x, g_resolutionEntries[1].y,\
-												g_resolutionEntries[2].x, g_resolutionEntries[2].y,\
-												g_resolutionEntries[3].x, g_resolutionEntries[3].y,\
-												g_resolutionEntries[4].x, g_resolutionEntries[4].y,\
-												g_resolutionEntries[5].x, g_resolutionEntries[5].y,\
-												g_resolutionEntries[6].x, g_resolutionEntries[6].y,\
-												g_resolutionEntries[7].x, g_resolutionEntries[7].y,\
-												g_resolutionEntries[8].x, g_resolutionEntries[8].y); // We write.
+		fprintf(f, szPayloadFormat, g_szExePath, g_resolutionEntries[0].x, g_resolutionEntries[0].y, \
+			g_resolutionEntries[1].x, g_resolutionEntries[1].y, \
+			g_resolutionEntries[2].x, g_resolutionEntries[2].y, \
+			g_resolutionEntries[3].x, g_resolutionEntries[3].y, \
+			g_resolutionEntries[4].x, g_resolutionEntries[4].y, \
+			g_resolutionEntries[5].x, g_resolutionEntries[5].y, \
+			g_resolutionEntries[6].x, g_resolutionEntries[6].y, \
+			g_resolutionEntries[7].x, g_resolutionEntries[7].y, \
+			g_resolutionEntries[8].x, g_resolutionEntries[8].y); // We write.
 	}
-	if(bWriteComplete)
+	if (bWriteComplete)
 	{
-		fprintf(f, "[Secret]\nOffset=%lx", g_offset);
+		fprintf(f, "\n[Secret]\nOffset=%lx", g_offset);
 	}
 	fclose(f); // We close the file responsibly.
 	return ERROR_NOERROR;
@@ -221,31 +225,137 @@ eErrors WriteGlobalVariablesToIni(char* szFile, bool bUseInternalDefaults, bool 
 
 eErrors PseudoGlobalVariablesFromIni(char* szFile)
 {
-	g_resolutionEntries[0] = (sResolution) {320, 240};
-	g_resolutionEntries[1] = (sResolution) {400, 300},
-	g_resolutionEntries[2] = (sResolution) {512, 384},
-	g_resolutionEntries[3] = (sResolution) {640, 480},
-	g_resolutionEntries[4] = (sResolution) {800, 600},
-	g_resolutionEntries[5] = (sResolution) {1024, 768},
-	g_resolutionEntries[6] = (sResolution) {1280, 1024},
-	g_resolutionEntries[7] = (sResolution) {320, 400},
-	g_resolutionEntries[8] = (sResolution) {320, 480},
-	g_offset = OFFSET_RESOLUTIONS;
-	g_szExePath = "..\\wc3.exe";
+	// This function is a placeholder for pretending to read entries.
+	// It can be used for testing, but should not be used normally.
+
+	g_resolutionEntries[0] = (sResolution){ 320, 240 };
+	g_resolutionEntries[1] = (sResolution){ 400, 300 },
+		g_resolutionEntries[2] = (sResolution){ 512, 384 },
+		g_resolutionEntries[3] = (sResolution){ 640, 480 },
+		g_resolutionEntries[4] = (sResolution){ 800, 600 },
+		g_resolutionEntries[5] = (sResolution){ 1024, 768 },
+		g_resolutionEntries[6] = (sResolution){ 1280, 1024 },
+		g_resolutionEntries[7] = (sResolution){ 320, 400 },
+		g_resolutionEntries[8] = (sResolution){ 320, 480 },
+		g_offset = OFFSET_RESOLUTIONS;
+	strcpy_s(g_szExePath, sizeof(g_szExePath), "..\\wc3.exe");
 	g_bCheckCurrentPath = true;
 
 	return ERROR_NOERROR;
 }
 
+int fn_ReadKeys(const char* section, const char* key, const char* value, void* userdata)
+{
+	if (strcmp(section, "Path") == 0)
+	{
+		if (strcmp(key, "exePath") == 0)
+		{
+			if (strlen(value) > 1)
+			{
+				strcpy_s(g_szExePath, sizeof(g_szExePath), value);
+			}
+			else return 0;
+		}
+	}
+	else if (strcmp(section, "Resolutions") == 0)
+	{
+		if (strcmp(key, "Free1") == 0)
+		{
+			if (sscanf_s(value, "%dx%d", &g_resolutionEntries[0].x, &g_resolutionEntries[0].y) != 2)
+			{
+				return 0;
+			}
+		}
+		else if (strcmp(key, "Free2") == 0)
+		{
+			if (sscanf_s(value, "%dx%d", &g_resolutionEntries[1].x, &g_resolutionEntries[1].y) != 2)
+			{
+				return 0;
+			}
+		}
+		else if (strcmp(key, "Free3") == 0)
+		{
+			if (sscanf_s(value, "%dx%d", &g_resolutionEntries[2].x, &g_resolutionEntries[2].y) != 2)
+			{
+				return 0;
+			}
+		}
+		else if (strcmp(key, "Main") == 0)
+		{
+			if (sscanf_s(value, "%dx%d", &g_resolutionEntries[3].x, &g_resolutionEntries[3].y) != 2)
+			{
+				return 0;
+			}
+		}
+		else if (strcmp(key, "Expanded1") == 0)
+		{
+			if (sscanf_s(value, "%dx%d", &g_resolutionEntries[4].x, &g_resolutionEntries[4].y) != 2)
+			{
+				return 0;
+			}
+		}
+		else if (strcmp(key, "Expanded2") == 0)
+		{
+			if (sscanf_s(value, "%dx%d", &g_resolutionEntries[5].x, &g_resolutionEntries[5].y) != 2)
+			{
+				return 0;
+			}
+		}
+		else if (strcmp(key, "Expanded3") == 0)
+		{
+			if (sscanf_s(value, "%dx%d", &g_resolutionEntries[6].x, &g_resolutionEntries[6].y) != 2)
+			{
+				return 0;
+			}
+		}
+		else if (strcmp(key, "Stereo1") == 0)
+		{
+			if (sscanf_s(value, "%dx%d", &g_resolutionEntries[7].x, &g_resolutionEntries[7].y) != 2)
+			{
+				return 0;
+			}
+		}
+		else if (strcmp(key, "Stereo2") == 0)
+		{
+			if (sscanf_s(value, "%dx%d", &g_resolutionEntries[8].x, &g_resolutionEntries[8].y) != 2)
+			{
+				return 0;
+			}
+		}
+	}
+	else if (strcmp(section, "Secret") == 0)
+	{
+		if (strcmp(key, "Offset") == 0)
+		{
+			if (sscanf_s(value, "%lx", &g_offset) != 1)
+			{
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
+
 eErrors ReadGlobalVariablesFromIni(char *szFile)
 {
 	//TODO Finish for real.
+	FILE *f;
   	if(!szFile)
 	{
 		szFile = DEFAULT_INI;
 	}
-	//return 0;
-	return PseudoGlobalVariablesFromIni(szFile);
+	#pragma warning(suppress : 4996)
+	if(!ini_openread(szFile, &f))
+	{
+		return ERROR_BADINI;
+	}
+	if (!ini_browse(fn_ReadKeys, NULL, szFile))
+	{
+		return ERROR_BADINI;
+	}
+	ini_close(&f);	// We responsibily close the file.
+	return 0;
+	//return PseudoGlobalVariablesFromIni(szFile);
 }
 
 const char* GetErrorMsgFromCode(eErrors code)
@@ -253,7 +363,7 @@ const char* GetErrorMsgFromCode(eErrors code)
 	const char * const a_szMessages[] = {
 						"No errro. Why are you getting this error code?",		// ERROR_NOERROR
 						"Bad error code. Something went seriously wrong.",		// ERROR_NOCODE
-						"Unable to find INI file. Did you copy the exe without the ini file?",	// ERROR_NOINI
+						"Unable to read INI file. Did you copy the exe without the ini file?",	// ERROR_BADINI
 						"Cannot open the exe to patch. Check your ini or path to the exe, and make sure it's writeable.", // ERROR_NOEXE
 						"Could not write to the file in question.", // ERROR_FAILWRITE
 						"Bad parameters. Check your command line arguments like -i and -o." // ERROR_BADPARAMS
@@ -336,7 +446,6 @@ void WriteResolution(FILE *f, int r)
 
 int main(int argc, char *argv[])
 {
-	int ret;
 	eErrors error;
 	eMode mode = MODE_HELP;
 	char* input = NULL, *output = NULL, *exeLocation = NULL;
@@ -348,7 +457,7 @@ int main(int argc, char *argv[])
 		return error;
 	}
 
-	printf("Mode: %d\n", mode);
+	printf("Mode: %d\n; bComplete: %d\n", mode, bComplete);
 	
 	if(mode == MODE_HELP)
 	{
@@ -367,16 +476,16 @@ int main(int argc, char *argv[])
 		printf("Done generating ini file.\n");
 		return 0;
 	}
-	
-	if (ReadGlobalVariablesFromIni(input) != ERROR_NOERROR)
-	{
-		printf("Error: %s", GetErrorMsgFromCode(ERROR_NOINI));
-		return ERROR_NOINI;
-	}
 
 	if (exeLocation != NULL)
 	{
-		g_szExePath = exeLocation; // Override exe Location.
+		strcpy_s(g_szExePath, sizeof(g_szExePath), exeLocation); // Override exe Location.
+	}
+	
+	if (ReadGlobalVariablesFromIni(input) != ERROR_NOERROR)
+	{
+		printf("Error: %s", GetErrorMsgFromCode(ERROR_BADINI));
+		return ERROR_BADINI;
 	}
 	
 	switch(mode)
