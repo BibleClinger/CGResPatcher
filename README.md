@@ -21,3 +21,4 @@ This utility, CGResPatcher can patch an existing WC3.exe (the Comanche Gold exe)
 
 - The way Comanche Gold scales widescreen resolutions in fullscreen seems particularly weird. Letterboxing does not begin to describe it. To fly in widescreen, edit one of the window resolutions.
 - Not all resolutions are supported. Comanche Gold seems to switch rendering modes in fullscreen, and weird things can happen in fullscreen. You may have to experiment between your graphic interception utility (ie. dgVoodoo), and this utility.
+- This project is still being developed right now. Do NOT use currently unless you are feeling adventurous. Use at your own risk. It is advised that you wait for a release.
