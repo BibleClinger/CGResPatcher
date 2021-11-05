@@ -3,8 +3,6 @@
 #include <string.h>
 #include "minIni/minIni.h"
 
-//#pragma warning(disable : 4996)
-
 /*
 	Usage:
 		-r: Read current exe values. No writing.
@@ -404,7 +402,7 @@ int PatchExe()
 {	//TODO
 	FILE *f;
 	
-	if(fopen_s(&f, g_szExePath, "w"))
+	if(fopen_s(&f, g_szExePath, "r+"))
 	{
 		return ERROR_NOEXE;
 	}
