@@ -6,7 +6,7 @@ This project provides a way to patch the available resolutions in Comanche Gold.
 Comanche Gold is a fantastic helicopter simulation from the late 1990's by Novalogic. The sim can still be played on Windows 10 even in multiplayer. Unfortunately this requires modifications.
 
 - The Modern OS Fix to run on Windows 10 (exe patch + copying of in-game video files) along with one of the menu files.
-- Multiplayer via TCP/IP is possible with the CGoldIP utility.
+- Multiplayer via TCP/IP is possible with the CGoldIP utility (with or without tunneling programs like Hamachi).
 - The DLLs from dgVoodoo can be used to allow more resolutions to work correctly. This allows selecting of the 1280x1024 resolution.
 
 # Current Problem
